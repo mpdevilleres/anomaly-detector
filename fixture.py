@@ -31,7 +31,7 @@ def generate_ip_address_v4(start=0, end=4294967295):
     return random.randint(start, end)
 
 
-def create_fixture(start_ip='172.0.0.0', end_ip='172.13.255.255'):
+def create_fixture(start_ip='172.0.0.0', end_ip='172.13.255.255', dst=None):
     """
     Creates test/sample data for packets
     """
@@ -52,14 +52,18 @@ def create_fixture(start_ip='172.0.0.0', end_ip='172.13.255.255'):
 
     content = '\n'.join([str(i) for i in content])
 
-    with open(os.path.join(BASE_DIR, 'packets', filename), 'w') as fn:
+    if dst is None:
+        dst = os.path.join(BASE_DIR, 'packets', filename)
+    else:
+        dst = os.path.join(BASE_DIR, dst, filename)
+    with open(dst, 'w') as fn:
         fn.write(content)
 
 
-def create_fixtures(n):
+def create_fixtures(start_ip='172.0.0.0', end_ip='172.13.255.255', n=10, dst=None):
     for _ in range(n):
-        create_fixture()
+        create_fixture(start_ip=start_ip, end_ip=end_ip, dst=dst)
 
 
 if __name__ == '__main__':
-    create_fixtures(50)
+    create_fixtures(n=50)
