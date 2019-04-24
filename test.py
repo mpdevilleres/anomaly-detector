@@ -3,7 +3,7 @@ import unittest
 import shutil
 
 from fixture import create_fixtures
-from utils import create_lookup, get_packet_files, parse_packet, check_anomaly
+from utils import create_lookup, get_packet_files, parse_packet, check_anomaly, build_lookup_dictionary
 
 
 class TestAnomalyDetector(unittest.TestCase):
@@ -36,6 +36,20 @@ class TestAnomalyDetector(unittest.TestCase):
         self.assertTrue(isinstance(packet['client_ip'], int))
         self.assertTrue(isinstance(packet['domain'], str))
         self.assertTrue(isinstance(packet['server_ips'], list))
+
+    def test_build_lookup_dictionary(self):
+        files = get_packet_files(self.src)
+        lookups = build_lookup_dictionary(files)
+
+        self.assertTrue(isinstance(lookups, dict))
+
+        keys = list(lookups.keys())
+        lookup = lookups[keys[0]]
+        self.assertTrue(isinstance(lookup, dict))
+        self.assertTrue(isinstance(lookup['cidr'], int))
+        self.assertTrue(isinstance(lookup['network_ip'], int))
+        self.assertTrue(isinstance(lookup['min_ip'], int))
+        self.assertTrue(isinstance(lookup['max_ip'], int))
 
     def test_create_lookup_01(self):
         # 172.13.118.194, 172.13.176.100, 172.13.94.34, 172.13.179.108
