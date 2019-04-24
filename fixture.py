@@ -1,20 +1,24 @@
 import os
 import random
-from random import getrandbits
-from ipaddress import IPv4Address
-
 import string
+from random import getrandbits
 from datetime import datetime
+from ipaddress import IPv4Address
 
 from utils import BASE_DIR
 
 
 def generate_domain():
+    """
+    Generate random domain
+    """
     min_len = 5
     max_len = 10
     length = random.randint(min_len, max_len)
 
-    #    return ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(length)) + '.com'
+    # UNCOMMENT if you want to create a more and wider array of domains
+    # return ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(length)) + '.com'
+
     return random.choice(['example.com', 'sample.com', 'another-example.io', 'more-sample.com'])
 
 
@@ -28,8 +32,10 @@ def generate_ip_address_v4(start=0, end=4294967295):
 
 
 def create_fixture(start_ip='172.0.0.0', end_ip='172.13.255.255'):
+    """
+    Creates test/sample data for packets
+    """
     now = datetime.now()
-
     domain = generate_domain()
 
     timestamp = datetime.timestamp(now)
@@ -50,7 +56,10 @@ def create_fixture(start_ip='172.0.0.0', end_ip='172.13.255.255'):
         fn.write(content)
 
 
-if __name__ == '__main__':
-    n = 14
+def create_fixtures(n):
     for _ in range(n):
         create_fixture()
+
+
+if __name__ == '__main__':
+    create_fixtures(50)
